@@ -2,18 +2,23 @@ package model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import util.DButil;
-
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class OwnerDAO {
-    public static Owner searchOwner(int OwnerId) throws SQLException, ClassNotFoundException {
-        String selectStmt = "SELECT * FROM OWNER WHERE OWNERID = ";
+    //select an owner
+    public static Owner searchOwnerbyID(int OwnerId) throws SQLException {
+        String selectStmt = "SELECT * FROM OWNER WHERE OWNERID = ?";
         try (Connection conn = DButil.dbConnect();
              PreparedStatement preparedStatement = conn.prepareStatement(selectStmt)) {
 
             preparedStatement.setInt(1, OwnerId);
-            ResultSet rsOwn = preparedStatement.executeQuery();
+            //Get ResultSet from dbExecuteQuery method
+            ResultSet rsOwn = DButil.dbExecutePreparedQuery(preparedStatement);
             Owner owner = getOwnerFromResultSet(rsOwn);
             return owner;
         } catch (SQLException e) {
@@ -21,23 +26,24 @@ public class OwnerDAO {
             throw e;
         }
     }
-
+    //Use ResultSet from DB as parameter and set Employee Object's attributes and return employee object.
     private static Owner getOwnerFromResultSet(ResultSet rsOwn) throws SQLException {
         Owner owner = null;
         if (rsOwn.next()) {
-            int ownerId = rsOwn.getInt("OWNERID");
-            String name = rsOwn.getString("NAME");
-            String address = rsOwn.getString("ADDRESS");
-            String phone = rsOwn.getString("PHONE");
-            String email = rsOwn.getString("EMAIL");
+            owner = new Owner();
+            owner.setOwnerId(rsOwn.getInt("OWNERID"));
+            owner.setName(rsOwn.getString("NAME"));
+            owner.setAddress(rsOwn.getString("ADDRESS"));
+            owner.setPhone(rsOwn.getString("PHONE"));
+            owner.setEmail(rsOwn.getString("EMAIL"));
+        }
 
-            owner = new Owner(ownerId, name, address, phone, email);
+            return owner;
         }
 
 
-        return owner;
-    }
 
+    //select owners
     public static ObservableList<Owner> searchOwner() throws SQLException, ClassNotFoundException {
         //Declare a SELECT statement
         String selectStmt = "SELECT * FROM OWNER";
@@ -76,24 +82,27 @@ public class OwnerDAO {
             System.out.println("ResultSet is empty.");
         }
         while (rsOwn.next()) {
-
-            int ownerId = rsOwn.getInt("OWNERID");
-            String name = rsOwn.getString("NAME");
-            String address = rsOwn.getString("ADDRESS");
-            String phone = rsOwn.getString("PHONE");
-            String email = rsOwn.getString("EMAIL");
-            System.out.println("Retrieved: " + ownerId + ", " + name + ", " + address + ", " + phone + ", " + email);
-
-            Owner owner = new Owner(ownerId, name, address, phone, email);
-
+            Owner owner = new Owner();
+            owner.setOwnerId(rsOwn.getInt("OWNERID"));
+            owner.setName(rsOwn.getString("NAME"));
+            owner.setAddress(rsOwn.getString("ADDRESS"));
+            owner.setPhone(rsOwn.getString("PHONE"));
+            owner.setEmail(rsOwn.getString("EMAIL"));
+            System.out.println("Retrieved: " +
+                    owner.getOwnerId() + ", " +
+                    owner.getName() + ", " +
+                    owner.getAddress() + ", " +
+                    owner.getPhone() + ", " +
+                    owner.getEmail());
             ownerList.add(owner);
         }
         //return empList (ObservableList of Employees)
-        return ownerList;
-    }
+            return ownerList;
+        }
+
 
     //update owner
-    public static void updateOwner(int ownerId, String name, String address, String phoneNumber, String email) throws SQLException {
+   /* public static void updateOwner(int ownerId, String name, String address, String phoneNumber, String email) throws SQLException {
         // SQL statement now includes the email field
         String sql = "UPDATE owner SET name = ?, address = ?, phone = ?, email = ? WHERE ownerid = ?";
 
@@ -107,6 +116,73 @@ public class OwnerDAO {
             // Handle any SQL exceptions
             throw e;
         }
+    }*/
+    public static void updateOwner(String ownerId, String name, String email, String phone, String address) throws SQLException, ClassNotFoundException {
+        // Validate that empId is provided
+        if (ownerId == null || ownerId.isEmpty()) {
+            throw new IllegalArgumentException("Owner ID is required.");
+        }
+
+        StringBuilder sql = new StringBuilder("UPDATE OWNER SET ");
+        List<Object> params = new ArrayList<>();
+
+        // Add parameters to the query if they are provided
+        if (name != null && !name.isEmpty()) {
+            sql.append("name = ?, ");
+            params.add(name);
+        }
+        if (email != null && !email.isEmpty()) {
+            sql.append("email = ?, ");
+            params.add(email);
+        }
+        if (phone != null && !phone.isEmpty()) {
+            sql.append("phone_number = ?, ");
+            params.add(phone);
+        }
+        if (address != null && !address.isEmpty()) {
+            sql.append("address = ?, ");
+            params.add(address);
+        }
+
+        // Check if any fields were updated, throw exception if none
+        if (params.isEmpty()) {
+            throw new IllegalArgumentException("No fields to update were provided.");
+        }
+
+        // Remove the last comma and space
+        int lastCommaIndex = sql.lastIndexOf(",");
+        if (lastCommaIndex != -1) {
+            sql.deleteCharAt(lastCommaIndex);
+        }
+
+        // Finalize the SQL statement
+        sql.append(" WHERE OWNERID = ?");
+        params.add(ownerId);
+
+        // Convert params list to an array and execute the update
+        Object[] paramArray = params.toArray(new Object[0]);
+        DButil.dbExecuteUpdate(sql.toString(), paramArray);
     }
 
+    //delete owner
+    public static void deleteOwnerWithId(int ownerId) throws SQLException {
+        String delstmt = "DELETE FROM OWNER WHERE OWNERID = ?";
+        Object[] params = {ownerId};
+        try{
+            DButil.dbExecuteUpdate(delstmt, params);
+        }catch(SQLException e){
+            System.out.println("Error during Delete operation: " + e);
+            throw e;
+        }
+    }
+    public static void insertOwnerInfo( String name, String address, String phone, String email) throws SQLException{
+        String sqlStmt = "INSERT INTO OWNER (OWNERID, NAME, ADDRESS, PHONE, EMAIL) VALUES (OWNER_ID_SEQ.NEXTVAL, ?, ?, ?, ?)";
+        Object[] params = { name, address, phone, email};
+        try{
+            DButil.dbExecuteUpdate(sqlStmt, params);
+        }catch (SQLException e){
+            System.out.println("Could not insert" +  e);
+            throw e;
+        }
+    }
 }

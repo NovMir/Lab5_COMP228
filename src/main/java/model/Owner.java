@@ -1,63 +1,83 @@
 package model;
-import util.DButil;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
+//changed standard types to property classes.bind to field in table
 public class Owner {
-    private int ownerId;
-    private String name;
-    private String address;
-    private String phone;
-    private String email;
-
+ //declare owner table column
+    private IntegerProperty ownerId;
+    private StringProperty name;
+    private StringProperty address;
+    private StringProperty phone;
+    private StringProperty email;
     // Constructor
-    public Owner(int ownerId, String name, String address, String phone, String email) {
-        this.ownerId = ownerId;
-        this.name = name;
-        this.address = address;
-        this.phone = phone;
-        this.email = email;
+    public Owner() {
+        this.ownerId = new SimpleIntegerProperty();
+        this.name = new SimpleStringProperty();
+        this.address = new SimpleStringProperty();
+        this.phone = new SimpleStringProperty();
+        this.email = new SimpleStringProperty();
     }
 
     // Getters
     public int getOwnerId() {
-        return ownerId;
+        return ownerId.get();
     }
 
     public String getName() {
-        return name;
+        return this.name.get();
     }
 
     public String getAddress() {
-        return address;
+        return this.address.get();
     }
 
     public String getPhone() {
-        return phone;
+        return this.phone.get();
     }
 
     public String getEmail() {
-        return email;
+        return this.email.get();
     }
 
     // Setters
     public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
+        this.ownerId.set(ownerId);
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.address.set(address);
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.phone.set(phone);
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email.set(email);
     }
+
+    public IntegerProperty ownerIdProperty(){
+        return ownerId;
+    }
+    public StringProperty nameProperty(){
+        return name;
+    }
+   public StringProperty addressProperty(){
+        return  address;
+   }
+   public StringProperty phoneProperty(){
+        return  phone;
+   }
+   public StringProperty emailProperty(){
+        return email;
+   }
 }
 
 
