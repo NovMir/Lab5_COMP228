@@ -13,7 +13,7 @@ import java.io.IOException;
 public class Main extends Application {
 
     private Stage primaryStage;
-    private RootLayout rootLayout; // Change the type to RootLayout
+    private RootLayout rootLayout;
     private RootLayoutController rootLayoutController;
 
     @Override

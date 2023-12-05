@@ -5,22 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RepairDAO {
-    private static final String JDBC_URL = "jdbc:oracle:thin:@your_oracle_host:your_oracle_port:your_oracle_sid";
-    private static final String JDBC_USER = "your_username";
-    private static final String JDBC_PASSWORD = "your_password";
+    private static final String dbURL = "jdbc:oracle:thin:@199.212.26.208:1521:SQLD";
+    private static final String username = "COMP214_F23_shah_29";
+    private static final String password = "H0tchoc*lat8";
 
-    public RepairDAO() {
-        // Ensure the JDBC driver is loaded
-        try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Oracle JDBC Driver not found.");
-        }
+    public static Connection dbConnect() throws SQLException {
+
+        Connection connection = DriverManager.getConnection(dbURL, username, password);
+        System.out.println("Database is connected");
+        return connection;
+
     }
 
     public boolean addRepair(Repair repair) {
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(dbURL, username, password)) {
             String sql = "INSERT INTO repairs (repair_id, owner_id, car_id, repair_date, description, cost) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setInt(1, repair.getRepairID());

@@ -40,7 +40,6 @@ public class RootLayout extends Application {
             controller.setMainApp(this);
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle the exception as needed, e.g., log or display an error message
         }
     }
 
