@@ -1,41 +1,65 @@
 package controller;
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import com.example.owner.Main;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
+import com.example.owner.Main;
+import model.RootLayout;
 
 import java.io.IOException;
 
-
-
-
 public class RootLayoutController {
 
-    /*//Reference to the main application
-    private Main main;
+    @FXML
+    private Button btnOwner;
 
-    //Is called by the main application to give a reference back to itself.
-    public void setMain (Main main) {
-        this.main = main;
-    }*/
+    @FXML
+    private Button btnRepair;
 
-    //Exit the program
-    public void handleExit(ActionEvent actionEvent) {
-        System.exit(0);
+    @FXML
+    private Button btnCar;
+
+    @FXML
+    private AnchorPane viewContainer;
+
+    private Main mainApp;
+
+    public void setMainApp(Main mainApp) {
+        this.mainApp = mainApp;
     }
 
-    //Help Menu button behavior
-    public void handleHelp(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Program Information");
-        alert.setHeaderText("This is a sample JAVAFX application for SWTESTACADEMY!");
-        alert.setContentText("You can search, delete, update, insert a new employee with this program.");
-        alert.show();
+    @FXML
+    public void initialize() {
+        // Set the Owner view as the default view
+        switchToOwnerView();
     }
 
+    @FXML
+    public void switchToOwnerView() {
+        // Load the Owner.fxml into the view container
+        loadView("Owner.fxml");
+    }
+
+    @FXML
+    public void switchToRepairView() {
+        // Load the Repair.fxml into the view container
+        loadView("Repair.fxml");
+    }
+
+    @FXML
+    public void switchToCarView() {
+        // Load the Car.fxml into the view container
+        loadView("Car.fxml");
+    }
+
+    public void loadView(String viewFileName) {
+        try {
+            AnchorPane pane = FXMLLoader.load(getClass().getResource(viewFileName));
+            viewContainer.getChildren().setAll(pane);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle the exception as needed, e.g., log or display an error message
+        }
+    }
 }

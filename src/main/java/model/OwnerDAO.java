@@ -9,7 +9,62 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
+
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class OwnerDAO {
+
+
+    //
+    private static ObservableList<Repair> getRepairList(ResultSet rsRepair) throws SQLException {
+        System.out.println("Entering getRepairList method.");
+        ResultSetMetaData rsmd = rsRepair.getMetaData();
+        System.out.println("Number of columns: " + rsmd.getColumnCount());
+        for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+            System.out.println("Column " + i + ": " + rsmd.getColumnName(i));
+        }
+        //Declare an observable List which comprises of repair objects
+        ObservableList<Repair> repairList = FXCollections.observableArrayList();
+        if (!rsRepair.isBeforeFirst()) {
+            System.out.println("ResultSet is empty.");
+        }
+        while (rsRepair.next()) {
+            Repair repair = new Repair();
+            repair.setRepairID(rsRepair.getInt("REPAIRID"));
+            repair.setOwnerID(rsRepair.getInt("OWNERID"));
+            repair.setCarID(rsRepair.getInt("CARID"));
+            repair.setDescription(rsRepair.getString("DESCRIPTION"));
+            repair.setCost(rsRepair.getInt("COST"));
+            repair.setRepairDate(rsRepair.getDate("REPAIR_DATE"));
+            repairList.add(repair);
+        }
+        return repairList;
+    }
+
+
+    public static ObservableList<Repair> getRepairsByOwnerID (int OwnerId) throws SQLException {
+        String selectStmt = "SELECT * FROM REPAIR_JOBS WHERE OWNERId = ?";
+        try (Connection conn = DButil.dbConnect();
+             PreparedStatement preparedStatement = conn.prepareStatement(selectStmt)) {
+            preparedStatement.setInt(1, (OwnerId));
+
+            try (ResultSet rsRepair = DButil.dbExecutePreparedQuery(preparedStatement)) {
+                // Use getRepairList to process the ResultSet and return the list
+                return getRepairList(rsRepair);
+            }
+        } catch (SQLException e) {
+            System.out.println("SQL select operation has been failed: " + e);
+            throw e;
+        }
+    }
+
+
+
+    //return empList (ObservableList of Employees)
+
     //select an owner
     public static Owner searchOwnerbyID(int OwnerId) throws SQLException {
         String selectStmt = "SELECT * FROM OWNER WHERE OWNERID = ?";

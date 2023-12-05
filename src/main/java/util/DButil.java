@@ -8,7 +8,7 @@ public class DButil {
 
     private static final String dbURL = "jdbc:oracle:thin:@199.212.26.208:1521:SQLD";
     private static final String username = "COMP214_F23_shah_29";
-    private static final String password = "password";
+    private static final String password = "H0tchoc*lat8";
 
     public static Connection dbConnect() throws SQLException {
 
