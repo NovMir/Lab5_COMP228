@@ -1,8 +1,12 @@
 package com.example.owner;
 
+import controller.CarController;
+import controller.OwnerController;
+import controller.RepairController;
 import controller.RootLayoutController;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -10,7 +14,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.Owner;
 import model.OwnerDAO;
-
+import model.Car;
+import model.CarDAO;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -24,58 +29,82 @@ public class Main extends Application {
     private BorderPane rootLayout;
 
 
+
+    private RootLayoutController rootLayoutController;
+
+
     @Override
     public void start(Stage primaryStage) throws IOException, SQLException, ClassNotFoundException {
         //1)declare a primary stage
         //1) Declare a primary stage (Everything will be on this stage)
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle(" JavaFX App");
-
+        primaryStage.setFullScreen(true);
         //2) Initialize RootLayout
         initRootLayout();
 
-        //3) Display the EmployeeOperations View
+        showCarView();
+
         showOwnersView();
     }
-
-
-        //Optional : seT A TITLEFOR PRIMARY STAGE
-     //   this.primaryStage.setTitle("auto repair");
-        //2)Initialize RootLayout
-       // initRootLayout();
-
-        //3)display the ownersOperations view
-        //showOwnersView();
-
-        //loadOwnerData();
-       // testUpdateOwner();
-
-
-
-
-
-     private void initRootLayout() {
+    private void initRootLayout() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("root-layout.fxml"));
-            rootLayout = (BorderPane) loader.load();
+            rootLayout = loader.load();
+            rootLayoutController = loader.getController();
+            rootLayoutController.setMainApp(this);
 
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            handleException("Error initializing root layout", e);
         }
     }
-    private void showOwnersView() {
+
+    public void showOwnersView() {
         try {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("owner.fxml"));
-            AnchorPane showOwnersView = (AnchorPane) loader.load();
-            rootLayout.setCenter(showOwnersView);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("owner.fxml"));
+            AnchorPane ownerView = (AnchorPane) loader.load();
+            rootLayout.setCenter(ownerView);
+            //give access to controller
+            OwnerController controller = loader.getController();
+            controller.setMainApp(this);
         } catch (IOException e) {
+            handleException("Error loading owner view", e);
+        }
+    }
+    public void showCarView(){
+        try{
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("car.fxml"));
+            AnchorPane showCarView = (AnchorPane) loader.load();
+            rootLayout.setCenter(showCarView);
+            CarController controller = loader.getController();
+            controller.setMainApp(this);
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
+
+    private void handleException(String message, Exception e) {
+        // You can customize how you handle exceptions here
+        System.err.println(message);
+        e.printStackTrace();
+    }
+    public void showRepairJobView(){
+        try{FXMLLoader loader = new FXMLLoader(Main.class.getResource("repair.fxml"));
+            AnchorPane showRepairJobView = (AnchorPane) loader.load();
+            rootLayout.setCenter(showRepairJobView);
+            RepairController controller = loader.getController();
+            controller.setMainApp(this);
+
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
 
 
     /*private void loadOwnerData() {

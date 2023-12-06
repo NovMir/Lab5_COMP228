@@ -10,53 +10,71 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="496.0" prefWidth="654.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OwnerController">
-    <VBox layoutX="195.0" layoutY="24.0" prefHeight="205.0" prefWidth="149.0">
-        <children>
-          <Label text="Name" />
-          <TextField fx:id="ownerUpdateName" promptText="update name" />
-          <Label text="Email" />
-          <TextField fx:id="ownerUpdateEmail" promptText="update email" />
-          <Label text="Address" />
-          <TextField fx:id="ownerUpdateAddress" promptText="update address" />
-          <Label text="Phone" />
-          <TextField fx:id="ownerUpdatePhone" promptText="update phone" />
-        </children>
-    </VBox>
-    <TextArea fx:id="resultArea" layoutX="442.0" layoutY="22.0" prefHeight="132.0" prefWidth="159.0" AnchorPane.bottomAnchor="342.0" AnchorPane.leftAnchor="442.0" AnchorPane.rightAnchor="53.0" AnchorPane.topAnchor="22.0" />
-   <VBox layoutX="24.0" layoutY="24.0" prefHeight="205.0" prefWidth="149.0">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="736.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OwnerController">
+   <AnchorPane layoutX="7.0" layoutY="5.0" prefHeight="580.0" prefWidth="695.0">
       <children>
-         <Label text="Name" />
-         <TextField fx:id="ownerName" />
-         <Label text="Email" />
-         <TextField fx:id="ownerEmail" />
-         <Label text="Address" />
-         <TextField fx:id="ownerAddress" />
-         <Label text="Phone" />
-         <TextField fx:id="ownerPhone" />
+          <Label layoutY="52.0" prefHeight="43.0" prefWidth="145.0" text="SEARCH BY OWNERID" AnchorPane.bottomAnchor="518.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="516.0" AnchorPane.topAnchor="20.0" />
+         <VBox prefHeight="205.0" prefWidth="149.0" AnchorPane.bottomAnchor="257.33333333333337" AnchorPane.leftAnchor="525.3333333333334" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <children>
+               <Label text="Name" />
+               <TextField fx:id="ownerName" />
+               <Label text="Email" />
+               <TextField fx:id="ownerEmail" />
+               <Label text="Address" />
+               <TextField fx:id="ownerAddress" />
+               <Label text="Phone" />
+               <TextField fx:id="ownerPhone" rotate="180.0" />
+                <Button fx:id="btnaddOwner" mnemonicParsing="false" onAction="#insertOwner" prefHeight="25.0" prefWidth="145.0" text="Add" />
+            </children>
+         </VBox>
+          <VBox prefHeight="205.0" prefWidth="149.0" AnchorPane.bottomAnchor="257.33333333333337" AnchorPane.leftAnchor="307.0" AnchorPane.rightAnchor="238.00000000000009" AnchorPane.topAnchor="20.0">
+              <children>
+                <Label text="Name" />
+                <TextField fx:id="ownerUpdateName" layoutX="97.0" layoutY="24.0" promptText="update name" />
+                <Label text="Email" />
+                <TextField fx:id="ownerUpdateEmail" promptText="update email" />
+                <Label text="Address" />
+                <TextField fx:id="ownerUpdateAddress" promptText="update address" />
+                <Label text="Phone" />
+                <TextField fx:id="ownerUpdatePhone" promptText="update phone" />
+                <Button fx:id="btnupdateOwner" mnemonicParsing="false" onAction="#handleUpdate" text="Update" />
+              </children>
+          </VBox>
+         <TableView fx:id="repairsTable" layoutY="290.0" prefHeight="193.0" prefWidth="672.0" visible="false" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="290.0">
+           <columns>
+             <TableColumn fx:id="repairIDcol" prefWidth="75.0" text="REPAIRID" />
+               <TableColumn fx:id="ownerIDcol" prefWidth="75.0" text="OWNERID" />
+               <TableColumn fx:id="carIDcol" prefWidth="75.0" text="CARID" />
+               <TableColumn fx:id="descriptioncol" prefWidth="104.4000244140625" text="DESCRIPTION" />
+               <TableColumn fx:id="costCol" prefWidth="75.0" text="COST" />
+               <TableColumn fx:id="repairdatecol" prefWidth="75.0" text="REPAIR_DATE" />
+           </columns>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+         </TableView>
+          <TableView fx:id="ownerTable" editable="true" layoutX="12.0" prefHeight="282.0" prefWidth="679.0" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="276.0">
+            <columns>
+                <TableColumn fx:id="ownerIdColumn" prefWidth="75.0" text="Owner_Id" />
+                <TableColumn fx:id="ownerNameColumn" prefWidth="75.0" text="Name" />
+                <TableColumn fx:id="ownerAddressColumn" prefWidth="173.33335876464844" text="Address" />
+                <TableColumn fx:id="ownerPhoneColumn" prefWidth="174.66659545898438" text="Phone" />
+                <TableColumn fx:id="ownerEmailColumn" maxWidth="162.66668701171875" minWidth="-1.0" prefWidth="162.66668701171875" text="Email" />
+            </columns>
+              <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+              </columnResizePolicy>
+          </TableView>
+          <TextArea fx:id="resultArea" layoutX="14.0" layoutY="91.0" prefHeight="105.0" prefWidth="215.0" AnchorPane.bottomAnchor="373.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="466.0" AnchorPane.topAnchor="91.0" />
+          <TextField fx:id="ownerIdText" layoutX="25.0" layoutY="50.0" prefHeight="25.0" prefWidth="131.0" promptText="for repairs/deletion/updates" AnchorPane.bottomAnchor="506.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="539.0" AnchorPane.topAnchor="50.0" />
+          <ButtonBar layoutX="13.0" layoutY="232.0" prefHeight="43.0" prefWidth="428.0">
+            <buttons>
+                <Button fx:id="btndeleteOwner" mnemonicParsing="false" onAction="#deleteOwner" prefHeight="25.0" prefWidth="111.0" text="Delete" />
+               <Button fx:id="btnrepairsbyowner" mnemonicParsing="false" onAction="#searchRepairbyownerid" text="Repairs" />
+                <Button fx:id="btnsearchOwner" mnemonicParsing="false" onAction="#searchOwner" prefHeight="25.0" text="Search" />
+                <Button fx:id="btnsearchAll" mnemonicParsing="false" onAction="#SearchAllOwners" text="Search all " />
+            </buttons>
+          </ButtonBar>
       </children>
-   </VBox>
-    <TableView fx:id="ownerTable" layoutX="25.0" layoutY="288.0" prefHeight="194.0" prefWidth="595.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="29.333333333333258" AnchorPane.rightAnchor="29.66666666666663" AnchorPane.topAnchor="285.0">
-      <columns>
-          <TableColumn fx:id="ownerIdColumn" prefWidth="75.0" text="Owner_Id" />
-          <TableColumn fx:id="ownerNameColumn" prefWidth="75.0" text="Name" />
-          <TableColumn fx:id="ownerAddressColumn" prefWidth="138.6667022705078" text="Address" />
-          <TableColumn fx:id="ownerPhoneColumn" prefWidth="142.66665649414062" text="Phone" />
-          <TableColumn fx:id="ownerEmailColumn" prefWidth="110.66665649414062" text="Email" />
-      </columns>
-        <columnResizePolicy>
-          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-        </columnResizePolicy>
-    </TableView>
-    <ButtonBar layoutX="22.0" layoutY="234.0" prefHeight="40.0" prefWidth="547.0">
-      <buttons>
-          <Button fx:id="btnsearchOwner" mnemonicParsing="false" onAction="#searchOwner" prefHeight="25.0" text="Search" />
-          <Button fx:id="btndeleteOwner" mnemonicParsing="false" onAction="#deleteOwner" prefHeight="25.0" prefWidth="111.0" text="Delete" />
-          <Button fx:id="btnupdateOwner" mnemonicParsing="false" text="Update" />
-          <Button fx:id="btnsearchAll" mnemonicParsing="false" onAction="#SearchAllOwners" text="Search all " />
-          <Button fx:id="btnaddOwner" mnemonicParsing="false" onAction="#insertOwner" prefHeight="25.0" prefWidth="145.0" text="Add" />
-      </buttons>
-    </ButtonBar>
-    <TextField fx:id="ownerIdText" layoutX="446.0" layoutY="197.0" />
-    <Label layoutX="315.0" layoutY="201.0" text="SEARCH BY OWNERID" />
+   </AnchorPane>
 </AnchorPane>

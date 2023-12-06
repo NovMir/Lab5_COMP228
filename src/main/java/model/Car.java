@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleStringProperty;
         // Declare Car table columns using JavaFX properties
         private IntegerProperty carId;
         private StringProperty model;
+        private StringProperty make_car;
         private IntegerProperty vin;
         private IntegerProperty buildYear;
         private StringProperty type;
@@ -20,8 +21,10 @@ import javafx.beans.property.SimpleStringProperty;
             this.model = new SimpleStringProperty();
             this.vin = new SimpleIntegerProperty();
             this.buildYear = new SimpleIntegerProperty();
-            this.type = new SimpleStringProperty();
+            this.make_car = new SimpleStringProperty();
+            this.type= new SimpleStringProperty();
         }
+
 
         // Getters
         public int getCarId() {
@@ -43,6 +46,10 @@ import javafx.beans.property.SimpleStringProperty;
         public String getType() {
             return type.get();
         }
+
+        public String getMake_Car(){return make_car.get();}
+
+        public void setMake_car(String make_car){this.make_car.set(make_car);}
 
         // Setters
         public void setCarId(int carId) {
@@ -85,6 +92,8 @@ import javafx.beans.property.SimpleStringProperty;
         public StringProperty typeProperty() {
             return type;
         }
+
+        public StringProperty makeCarProperty(){return make_car;}
     }
 
 
